@@ -22,7 +22,7 @@ verifier:
 
 platforms:
   - name: ubuntu-20.04
-  - name: centos-8
+  - name: centos-7      # centos-8 is not currently supported for VMs
 
 suites:
   - name: default

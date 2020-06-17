@@ -14,3 +14,4 @@ run_list 'rblx_prometheus::default'
 
 # Specify a custom source for a single cookbook:
 cookbook 'rblx_prometheus', path: '.'
+cookbook 'docker', '~> 6.0.3', :supermarket

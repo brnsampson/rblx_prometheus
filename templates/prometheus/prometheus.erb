@@ -1,0 +1,23 @@
+global:
+  scrape_interval:     10s
+  evaluation_interval: 30s
+  # scrape_timeout is set to the global default (10s).
+
+  external_labels:
+    environment: Development
+    service: Prometheus
+    region: localhost
+    dc: local
+
+#rule_files:
+#  - "prometheus.rules.yml"
+
+scrape_configs:
+  # metrics_path defaults to '/metrics'
+  # scheme defaults to 'http'.
+  - job_name: prometheus
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    honor_labels: true
+    static_configs:
+      - targets: ['localhost:9090']
