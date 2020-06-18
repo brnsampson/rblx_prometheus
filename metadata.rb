@@ -1,10 +1,15 @@
 name 'rblx_prometheus'
-maintainer 'The Authors'
-maintainer_email 'you@example.com'
+maintainer 'Brian Sampson'
+maintainer_email 'bsampson@roblox.com'
 license 'All Rights Reserved'
 description 'Installs/Configures rblx_prometheus'
-version '0.1.0'
+version '0.1.1'
 chef_version '>= 14.0'
+issues_url 'https://github.com/Roblox/rblx_prometheus/issues'
+source_url 'https://github.com/Roblox/rblx_prometheus'
+
+supports 'centos', '>= 7'
+supports 'ubuntu', '>= 16.04'
 
 # The `issues_url` points to the location where issues for this cookbook are
 # tracked.  A `View Issues` link will be displayed on this cookbook's page when
