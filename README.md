@@ -1,16 +1,26 @@
 # rblx_prometheus
 
-Installs Prometheus in a docker container with a default configuration. Works on ubuntu 20.04 and centos 7.
+# Description
 
-"kitchen test" results:
+Installs/Configures prometheus running in docker
 
-  Service docker
-     ✔  is expected to be installed
-     ✔  is expected to be enabled
-     ✔  is expected to be running
-  Port 9090
-     ✔  is expected to be listening
-  Command: `curl -XGET -s http://localhost:9090/-/healthy`
-     ✔  stdout is expected to eq "Prometheus is Healthy.\n"
+# Requirements
 
-Test Summary: 5 successful, 0 failures, 0 skipped
+## Platform
+
+* centos 7
+* ubuntu 18.04
+* version issue with ubuntu 20.04 and rblx_docker
+
+## Cookbooks
+
+* docker
+* ssl_certificate
+* rblx_docker
+* consul-cluster
+* consul
+
+## Recipes
+
+* rblx_prometheus::default
+* rblx_prometheus::install

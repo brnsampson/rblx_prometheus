@@ -11,17 +11,13 @@ driver:
 ## localhost on the host.
 ## see also: https://www.vagrantup.com/docs/networking/forwarded_ports.html
 
-#  network:
-#    - ["forwarded_port", {guest: 80, host: 8080}]
-
 provisioner:
   name: chef_zero
-  require_chef_omnibus: 14
+  product_name: chef
+  product_version: 14
 
-  ## product_name and product_version specifies a specific Chef product and version to install.
-  ## see the Chef documentation for more details: https://docs.chef.io/workstation/config_yml_kitchen/
-  #  product_name: chef
-  #  product_version: 16
+## product_name and product_version specifies a specific Chef product and version to install.
+## see the Chef documentation for more details: https://docs.chef.io/workstation/config_yml_kitchen/
 
 verifier:
   name: inspec
@@ -31,7 +27,7 @@ platforms:
     lifecycle:
       post_converge:
       - local: sleep 5
-  - name: centos-7      # centos-8 is not currently supported for VMs
+  - name: centos-7
     lifecycle:
       post_converge:
       - local: sleep 5
@@ -59,4 +55,3 @@ suites:
             bag: consul
             item: consul
             item_key: ca_cert
-
