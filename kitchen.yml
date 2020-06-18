@@ -27,8 +27,14 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-20.04
+  - name: ubuntu-18.04
+    lifecycle:
+      post_converge:
+      - local: sleep 5
   - name: centos-7      # centos-8 is not currently supported for VMs
+    lifecycle:
+      post_converge:
+      - local: sleep 5
 
 suites:
   - name: default
