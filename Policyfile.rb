@@ -15,4 +15,8 @@ run_list ['consul-cluster', 'rblx_docker::default', 'rblx_prometheus::default']
 
 # Specify a custom source for a single cookbook:
 cookbook 'rblx_prometheus', path: '.'
-cookbook 'docker', '~> 6.0.3', :supermarket
+cookbook 'docker', '4.9', :supermarket
+cookbook 'ssl_certificate', '~> 2.1', :supermarket
+cookbook 'rblx_docker', '~> 0.1', git: 'https://github.com/Roblox/orchestration-chef', rel: 'cookbooks/rblx_docker/'
+cookbook 'consul-cluster', '9002.2.2', git: 'https://github.com/Roblox/consul-cluster-cookbook', tag: 'v9002.2.2'
+cookbook 'consul', '9003.1.10', git: 'https://github.com/Roblox/consul-cookbook', tag: 'v9003.1.10'
