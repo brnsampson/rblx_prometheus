@@ -31,6 +31,14 @@ describe port(9090) do
   it { should be_listening }
 end
 
+describe file('/etc/prometheus/prometheus.yml') do
+  it { should exist }
+end
+
 describe command('curl -XGET -s http://localhost:9090/-/healthy') do
-  its('stdout') { should eq "Prometheus is Healthy.\n" }
+  its('stdout') { should match "Prometheus is Healthy." }
+end
+
+describe command('curl -XGET -s http://localhost:9090/api/v1/targets') do
+  its('stdout') { should match "localhost:9090"}
 end
