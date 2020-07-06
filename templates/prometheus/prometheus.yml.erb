@@ -20,4 +20,4 @@ scrape_configs:
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: <%= @scrape_list %>

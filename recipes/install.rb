@@ -18,7 +18,8 @@ directory '/etc/prometheus' do
 end
 
 template config_location do
-  source 'prometheus/prometheus.erb'
+  source 'prometheus/prometheus.yml.erb'
+  variables(scrape_list: node['rblx_prometheus']['collection']['scrape_list'])
   mode '0755'
   notifies :restart, "service[prometheus]", :delayed
 end

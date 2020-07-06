@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.3
+- Updated prometheus.yml to monitor itself with corresponding tests
+- Fixed kitchen versioning issues
+- Modernized chef config stuff
+
 ## 0.1.2
 - Added test databag for consul-cluster
 - Fixed up some testing bugs that might have been caused by chef doing caching yesterday
