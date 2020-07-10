@@ -10,7 +10,6 @@ Installs/Configures prometheus running in docker
 
 * centos 7
 * ubuntu 18.04
-* version issue with ubuntu 20.04 and rblx_docker
 
 ## Cookbooks
 
@@ -24,3 +23,4 @@ Installs/Configures prometheus running in docker
 
 * rblx_prometheus::default
 * rblx_prometheus::install
+* rblx_prometheus::consul_service
