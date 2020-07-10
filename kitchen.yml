@@ -55,3 +55,9 @@ suites:
             bag: consul
             item: consul
             item_key: ca_cert
+      infradb:
+        serverInfo:
+          Server:
+            Location:
+              Pod:
+                Name: test_tag
