@@ -1,6 +1,7 @@
 image_name = 'prom/prometheus:latest'
 config_location = '/etc/prometheus/prometheus.yml'
-mount_string = "-v #{config_location}:#{config_location}"
+rules_location = '/etc/prometheus/prometheus.rules.yml'
+mount_string = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location}"
 
 docker_service 'default' do
   action [:create, :start]
@@ -17,9 +18,18 @@ directory '/etc/prometheus' do
   action :create
 end
 
+template rules_location do
+  source 'prometheus/prometheus.rules.yml.erb'
+  mode '0755'
+  notifies :restart, "service[prometheus]", :delayed
+end
+
 template config_location do
   source 'prometheus/prometheus.yml.erb'
-  variables(scrape_list: node['rblx_prometheus']['collection']['scrape_list'])
+  variables(
+    scrape_list: node['rblx_prometheus']['config']['collection']['scrape_list'],
+    node_list: node['rblx_prometheus']['config']['alerting']['_alert_list']
+  )
   mode '0755'
   notifies :restart, "service[prometheus]", :delayed
 end
