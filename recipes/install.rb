@@ -32,6 +32,7 @@ template config_location do
   )
   mode '0755'
   notifies :restart, "service[prometheus]", :delayed
+  not_if { node['rblx_prometheus']['config']['alerting']['_disable'] }
 end
 
 service_name = 'prometheus'

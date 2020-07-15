@@ -34,6 +34,7 @@ platforms:
 
 suites:
   - name: default
+    named_run_list: testing
     verifier:
       inspec_tests:
         - test/integration/default
