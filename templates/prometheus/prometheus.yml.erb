@@ -9,8 +9,13 @@ global:
     region: localhost
     dc: local
 
-#rule_files:
-#  - "prometheus.rules.yml"
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: <%= @alert_list %>
+
+rule_files:
+  - prometheus.rules.yml
 
 scrape_configs:
   # metrics_path defaults to '/metrics'

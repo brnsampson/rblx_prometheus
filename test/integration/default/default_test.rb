@@ -35,6 +35,10 @@ describe file('/etc/prometheus/prometheus.yml') do
   it { should exist }
 end
 
+describe file('/etc/prometheus/prometheus.rules.yml') do
+  it { should exist }
+end
+
 describe command('curl -XGET -s http://localhost:9090/-/healthy') do
   its('stdout') { should match "Prometheus is Healthy." }
 end
