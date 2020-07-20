@@ -9,7 +9,7 @@ control 'prometheus_consul_service' do
     "port": 9090,
     "tags": [
       "prometheus",
-      "test_tag"
+      "fake-pod"
     ]
   }
 })}

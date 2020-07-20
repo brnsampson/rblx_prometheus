@@ -1,10 +1,18 @@
-default['rblx_prometheus']['absent'] = false
-default['rblx_prometheus']['config']['collection']['scrape_discovery'] = true
-default['rblx_prometheus']['config']['collection']['scrape_list'] = ['localhost:9090']
+default['rblx_prometheus']['config']['datacenter'] = nil
+default['rblx_prometheus']['config']['pod'] = nil
 
-default['rblx_prometheus']['config']['alerting']['consul_discovery'] = true
-default['rblx_prometheus']['config']['alerting']['alertmanager_service'] = 'alertmanager-pod-telemetry'
-default['rblx_prometheus']['config']['alerting']['_disable'] = false
+default['rblx_prometheus']['config']['telegraf_input']['enable'] = true
+default['rblx_prometheus']['config']['telegraf_input']['disable'] = false
+default['rblx_prometheus']['config']['telegraf_input']['port'] = '9273'
+default['rblx_prometheus']['config']['telegraf_input']['target_list'] = []
+default['rblx_prometheus']['config']['telegraf_input']['graphql'] = 'https://graphql-infra.simulpong.com/graphql'
+
+default['rblx_prometheus']['config']['alertmanager_output']['enable'] = true
+default['rblx_prometheus']['config']['alertmanager_output']['disable'] = false
+default['rblx_prometheus']['config']['alertmanager_output']['service'] = 'alertmanager-pod-telemetry'
+
+#### Absent attribute. Set this to true to remove prometheus from the system. ####
+default['rblx_prometheus']['absent'] = false
 
 #### Consul service control
 default['rblx_prometheus']['absent_consul'] = false

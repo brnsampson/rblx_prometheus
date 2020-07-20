@@ -11,7 +11,7 @@ default_source :supermarket
 
 # run_list: chef-client will run these recipes in the order specified.
 run_list ['consul-cluster', 'rblx_docker::default', 'rblx_prometheus::default']
-named_run_list :testing, ['consul-cluster', 'rblx_docker::default', 'rblx_prometheus::install', 'rblx_prometheus::consul_service']
+named_run_list :testing, ['consul-cluster', 'rblx_docker::default', 'rblx_prometheus::testing']
 
 # Specify a custom source for a single cookbook:
 cookbook 'rblx_prometheus', path: '.'

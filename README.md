@@ -19,8 +19,11 @@ Installs/Configures prometheus running in docker
 * consul-cluster
 * consul
 
-## Recipes
+# Recipes
 
+* rblx_prometheus::consul_discovery
+* rblx_prometheus::consul_service
 * rblx_prometheus::default
 * rblx_prometheus::install
-* rblx_prometheus::consul_service
+* rblx_prometheus::target_discovery
+* rblx_prometheus::testing

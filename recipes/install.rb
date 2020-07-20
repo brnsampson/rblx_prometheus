@@ -1,7 +1,16 @@
+#
+# Cookbook:: rblx_prometheus
+# Recipe:: install
+#
+# Copyright:: 2020, Roblox, All Rights Reserved.
+
 image_name = 'prom/prometheus:latest'
 config_location = '/etc/prometheus/prometheus.yml'
 rules_location = '/etc/prometheus/prometheus.rules.yml'
 mount_string = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location}"
+
+service_name = 'prometheus'
+docs = 'https://prometheus.io/docs/'
 
 docker_service 'default' do
   action [:create, :start]
@@ -27,16 +36,14 @@ end
 template config_location do
   source 'prometheus/prometheus.yml.erb'
   variables(
-    scrape_list: node['rblx_prometheus']['config']['collection']['scrape_list'],
-    node_list: node['rblx_prometheus']['config']['alerting']['_alert_list']
+    alert_list: node['rblx_prometheus']['config']['alertmanager_output']['alert_list'],
+    scrape_list: node['rblx_prometheus']['config']['telegraf_input']['target_list']
   )
   mode '0755'
   notifies :restart, "service[prometheus]", :delayed
-  not_if { node['rblx_prometheus']['config']['alerting']['_disable'] }
+  not_if { node['rblx_prometheus']['config']['alertmanager_output']['disable'] }
+  not_if { node['rblx_prometheus']['config']['telegraf_input']['disable'] }
 end
-
-service_name = 'prometheus'
-docs = 'https://prometheus.io/docs/'
 
 systemd_unit 'prometheus.service' do
   content({

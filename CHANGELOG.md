@@ -2,9 +2,15 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.5
+- Added target discovery using graphql to query infradb
+- Added consul service discovery of alertmanagers
+- Circleci test fix
+- More linting
+
 ## 0.1.4
 - Created recipe to add prometheus-pod-telemetry consul service
-- Added corresponding unit test
+- Code cleanup
 
 ## 0.1.3
 - Updated prometheus.yml to monitor itself with corresponding tests
