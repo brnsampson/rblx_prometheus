@@ -9,7 +9,7 @@ consul_name = "prometheus-pod-telemetry"
 
 tag_list = ['prometheus']
 infradb_available = (node.key?('infradb') and node['infradb'].key?('serverInfo') and node['infradb']['serverInfo'].key?('Server') and not node['infradb']['serverInfo']['Server'].nil?)
-location_available = (not node['infradb']['serverInfo']['Server']['Location'].nil?)
+location_available = (infradb_available && !node['infradb']['serverInfo']['Server']['Location'].nil?)
 
 if infradb_available && location_available
   pod = node['infradb']['serverInfo']['Server']['Location']['Pod']['Name']
