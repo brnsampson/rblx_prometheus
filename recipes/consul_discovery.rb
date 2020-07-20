@@ -34,5 +34,5 @@ if node['rblx_prometheus']['config']['alertmanager_output']['enable'] == true
   end
 else
   node.override['rblx_prometheus']['config']['alertmanager_output']['disable'] = false
-  node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = node['rblx_prometheus']['config']['alertmanager_output']['service']
+  node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = [node['rblx_prometheus']['config']['alertmanager_output']['service']]
 end
