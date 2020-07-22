@@ -26,7 +26,7 @@ if node['rblx_prometheus']['config']['telegraf_input']['enable'] and dc and pod
   port = node['rblx_prometheus']['config']['telegraf_input']['port']
   graphql = node['rblx_prometheus']['config']['telegraf_input']['graphql']
   begin
-    uri = URI.parse("#{graphql}?query={DataCenter(Abbreviation:\"#{dc}\"){PodsWithDataCenter(Name:\"#{pod}\"){ServerLocationsWithPod{Server{HostName,PrimaryIPAddress}}}}}")
+    uri = URI.parse("#{graphql}/graphql?query={DataCenter(Abbreviation:\"#{dc}\"){PodsWithDataCenter(Name:\"#{pod}\"){ServerLocationsWithPod{Server{HostName,PrimaryIPAddress}}}}}")
     response = Net::HTTP.get_response(uri)
     
     res = JSON.parse(response.body)
