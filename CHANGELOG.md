@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.6
+- Graphql fix and consul_discovery tweak
+
 ## 0.1.5
 - Added target discovery using graphql to query infradb
 - Added consul service discovery of alertmanagers

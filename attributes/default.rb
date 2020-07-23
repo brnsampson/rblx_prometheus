@@ -5,7 +5,7 @@ default['rblx_prometheus']['config']['telegraf_input']['enable'] = true
 default['rblx_prometheus']['config']['telegraf_input']['disable'] = false
 default['rblx_prometheus']['config']['telegraf_input']['port'] = '9273'
 default['rblx_prometheus']['config']['telegraf_input']['target_list'] = []
-default['rblx_prometheus']['config']['telegraf_input']['graphql'] = 'https://graphql-infra.simulpong.com/graphql'
+default['rblx_prometheus']['config']['telegraf_input']['graphql'] = node['graphql'].nil? ? 'graphql-infra.simulpong.com' : node['graphql']['addr']
 
 default['rblx_prometheus']['config']['alertmanager_output']['enable'] = true
 default['rblx_prometheus']['config']['alertmanager_output']['disable'] = false
