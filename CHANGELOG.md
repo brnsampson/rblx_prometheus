@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.7
+- Fixup target discovery bugs
+
 ## 0.1.6
 - Graphql fix and consul_discovery tweak
 

@@ -9,6 +9,9 @@ config_location = '/etc/prometheus/prometheus.yml'
 rules_location = '/etc/prometheus/prometheus.rules.yml'
 mount_string = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location}"
 
+override_list = node['rblx_prometheus']['config']['telegraf_input']['target_list_override']
+target_list = override_list.empty? ? node['rblx_prometheus']['config']['telegraf_input']['_target_list'] : override_list
+
 service_name = 'prometheus'
 docs = 'https://prometheus.io/docs/'
 
@@ -37,12 +40,12 @@ template config_location do
   source 'prometheus/prometheus.yml.erb'
   variables(
     alert_list: node['rblx_prometheus']['config']['alertmanager_output']['alert_list'],
-    scrape_list: node['rblx_prometheus']['config']['telegraf_input']['target_list']
+    scrape_list: target_list
   )
   mode '0755'
   notifies :restart, "service[prometheus]", :delayed
   not_if { node['rblx_prometheus']['config']['alertmanager_output']['disable'] }
-  not_if { node['rblx_prometheus']['config']['telegraf_input']['disable'] }
+  not_if { node['rblx_prometheus']['config']['telegraf_input']['_disable'] and override_list.empty? }
 end
 
 systemd_unit 'prometheus.service' do
