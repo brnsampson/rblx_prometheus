@@ -32,3 +32,4 @@ if node['rblx_prometheus']['config']['prometheus']['enable'] == true
     node.override['rblx_prometheus']['config']['prometheus']['_disable'] = true
     node.override['rblx_prometheus']['config']['prometheus']['_target_list'] = ['ERROR']
   end
+end

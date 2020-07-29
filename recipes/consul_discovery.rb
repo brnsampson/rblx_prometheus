@@ -32,3 +32,4 @@ if node['rblx_prometheus']['config']['alertmanager']['enable'] == true
     node.override['rblx_prometheus']['config']['alertmanager']['_disable'] = true
     node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = ['ERROR']
   end
+end
