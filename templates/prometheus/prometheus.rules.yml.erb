@@ -18,6 +18,49 @@ groups:
       description: Service {{ $labels.instance }} is available.
       value: UP ({{ $value }})
 
+  # scrape target down
+  - alert: service_down
+    expr: up{job="scrape"} == 0
+    for: 5m
+    labels:
+      service: Platform
+      severity: warning
+      correlate: service_up,service_down
+    annotations:
+      description: Service {{ $labels.instance }} has been unavailable for over 5 minutes.
+      value: DOWN ({{ $value }})
+
+  # multiple scrape targets down
+  - alert: multiple_services_down
+    expr: avg(up{job="scrape"}) BY (job) < 0.5
+    for: 5m
+    labels:
+      service: Platform
+      severity: major
+    annotations:
+      description: More than half the scrape targets have been unavailable for over 5 minutes.
+      value: DOWN ({{ $value }})
+
+  # prometheus down
+  - alert: prometheus_down
+    expr: up{job="prometheus"} == 0
+    for: 5m
+    labels:
+      service: Platform
+    annotations:
+      description: Prometheus {{ $labels.instance }} has been unavailable for over 5 minutes.
+      value: DOWN ({{ $value }})
+
+  # alertmanager down
+  - alert: alertmanager_down
+    expr: up{job="alertmanager"} == 0
+    for: 5m
+    labels:
+      service: Platform
+    annotations:
+      description: AlertManager {{ $labels.instance }} has been unavailable for over 5 minutes.
+      value: DOWN ({{ $value }})
+
   # system load alert
   - alert: high_load
     expr: node_load1 > 0.5
