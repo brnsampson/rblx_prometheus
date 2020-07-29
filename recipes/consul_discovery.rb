@@ -4,13 +4,13 @@
 #
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
-if node['rblx_prometheus']['config']['alertmanager_output']['enable'] == true
+if node['rblx_prometheus']['config']['alertmanager']['enable'] == true
   require 'net/http'
   require 'uri'
   require 'json'
 
   addresses = []
-  alertmanager_service = node['rblx_prometheus']['config']['alertmanager_output']['service']
+  alertmanager_service = node['rblx_prometheus']['config']['alertmanager']['consul_service']
   begin
     uri = URI.parse("http://127.0.0.1:8500/v1/catalog/service/#{alertmanager_service}")
     response = Net::HTTP.get_response(uri)
@@ -22,17 +22,14 @@ if node['rblx_prometheus']['config']['alertmanager_output']['enable'] == true
     end if response.code
    
     if addresses.empty?
-      node.override['rblx_prometheus']['config']['alertmanager_output']['disable'] = true
-      node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = ['ERROR']
+      node.override['rblx_prometheus']['config']['alertmanager']['_disable'] = true
+      node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = ['EMPTY']
     else
-      node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = addresses
+      node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = addresses
     end 
   rescue
-    # We had some error looking up the consul service, then disable the kafka output for this run.
-    node.override['rblx_prometheus']['config']['alertmanager_output']['disable'] = true
-    node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = ['ERROR']
+    # We had some error looking up the consul service
+    node.override['rblx_prometheus']['config']['alertmanager']['_disable'] = true
+    node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = ['ERROR']
   end
-else
-  node.override['rblx_prometheus']['config']['alertmanager_output']['disable'] = false
-  node.override['rblx_prometheus']['config']['alertmanager_output']['alert_list'] = [node['rblx_prometheus']['config']['alertmanager_output']['service']]
 end

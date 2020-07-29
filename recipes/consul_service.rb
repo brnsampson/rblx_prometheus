@@ -5,7 +5,7 @@
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
 port = 9090
-consul_name = "prometheus-pod-telemetry"
+consul_name = node['rblx_prometheus']['config']['prometheus']['consul_service']
 
 tag_list = ['prometheus']
 pod = node['rblx_prometheus']['config']['pod']

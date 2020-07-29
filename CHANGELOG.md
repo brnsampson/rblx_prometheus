@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.8
+- Configured new alerts for each system component
+
 ## 0.1.7
 - Fixup target discovery bugs
 

@@ -20,9 +20,21 @@ rule_files:
 scrape_configs:
   # metrics_path defaults to '/metrics'
   # scheme defaults to 'http'.
-  - job_name: prometheus
+  - job_name: scrape
     scrape_interval: 5s
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
       - targets: <%= @scrape_list %>
+  - job_name: prometheus
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    honor_labels: true
+    static_configs:
+      - targets: <%= @prom_list %>
+  - job_name: alertmanager
+    scrape_interval: 5s
+    scrape_timeout: 2s
+    honor_labels: true
+    static_configs:
+      - targets: <%= @alert_list %>

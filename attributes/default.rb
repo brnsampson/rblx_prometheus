@@ -6,11 +6,15 @@ default['rblx_prometheus']['config']['telegraf_input']['port'] = '9273'
 default['rblx_prometheus']['config']['telegraf_input']['target_list_override'] = []
 default['rblx_prometheus']['config']['telegraf_input']['graphql'] = node['graphql'].nil? ? 'graphql-infra.simulpong.com' : node['graphql']['addr']
 
-default['rblx_prometheus']['config']['alertmanager_output']['enable'] = true
-default['rblx_prometheus']['config']['alertmanager_output']['disable'] = false
-default['rblx_prometheus']['config']['alertmanager_output']['service'] = 'alertmanager-pod-telemetry'
+default['rblx_prometheus']['config']['alertmanager']['enable'] = true
+default['rblx_prometheus']['config']['alertmanager']['consul_service'] = 'alertmanager-pod-telemetry'
+default['rblx_prometheus']['config']['alertmanager']['target_list_override'] = []
 
-#### Absent attribute. Set this to true to remove prometheus from the system. ####
+default['rblx_prometheus']['config']['prometheus']['enable'] = true
+default['rblx_prometheus']['config']['prometheus']['consul_service'] = 'prometheus-pod-telemetry'
+default['rblx_prometheus']['config']['prometheus']['target_list_override'] = []
+
+#### Absent attribute. Set this to true to remove prometheus from the system
 default['rblx_prometheus']['absent'] = false
 
 #### Consul service control
