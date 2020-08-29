@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.9
+- Rework cleanup command to make sure we cleanup old containers
+- Label docker containers for easier purge/deletion
+- Separate out user and configuration stuff for readability
+- Create user/group and pass that UID to the container
+- Mount data directory inside container for persistence. Defaults to /var/lib/prometheus/
+
 ## 0.1.8
 - Configured new alerts for each system component
 

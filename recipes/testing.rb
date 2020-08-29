@@ -11,5 +11,7 @@ node.override['rblx_prometheus']['config']['prometheus']['target_list_override']
 node.override['rblx_prometheus']['config']['pod'] = 'fake-pod'
 node.override['rblx_prometheus']['config']['datacenter'] = 'fake-datacenter'
 
+include_recipe 'rblx_prometheus::user'
+include_recipe 'rblx_prometheus::config'
 include_recipe 'rblx_prometheus::install'
 include_recipe 'rblx_prometheus::consul_service'

@@ -3,6 +3,16 @@
 # The InSpec reference, with examples and extensive documentation, can be
 # found at https://www.inspec.io/docs/reference/resources/
 
+describe group('prometheus') do
+  it { should exist }
+end
+
+describe user('prometheus') do
+  it { should exist }
+  its('uid') { should eq 34090 }
+  its('group') { should eq 'prometheus' }
+end
+
 describe service('docker') do
   it { should be_installed }
   it { should be_enabled }
