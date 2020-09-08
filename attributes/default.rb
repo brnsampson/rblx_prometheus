@@ -1,3 +1,9 @@
+default['rblx_prometheus']['image'] = 'prom/prometheus'
+default['rblx_prometheus']['tag'] = 'latest'
+
+default['rblx_prometheus']['config']['uid'] = "34090"
+default['rblx_prometheus']['config']['docker_label'] = 'prometheus'
+
 default['rblx_prometheus']['config']['datacenter'] = nil
 default['rblx_prometheus']['config']['pod'] = nil
 

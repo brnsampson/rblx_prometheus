@@ -4,21 +4,22 @@
 #
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
-image_name = 'prom/prometheus:latest'
+image_name = "#{node['rblx_prometheus']['image']}:#{node['rblx_prometheus']['tag']}"
 config_location = '/etc/prometheus/prometheus.yml'
 rules_location = '/etc/prometheus/prometheus.rules.yml'
-mount_string = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location}"
+data_location = '/var/lib/prometheus'
+mounts = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location} -v #{data_location}:/prometheus"
+label = node['rblx_prometheus']['config']['docker_label']
+labels = "--label #{label}"
 
-scrape_override = node['rblx_prometheus']['config']['telegraf_input']['target_list_override']
-alert_override = node['rblx_prometheus']['config']['alertmanager']['target_list_override']
-prom_override = node['rblx_prometheus']['config']['prometheus']['target_list_override']
-
-scrape_list = scrape_override.empty? ? node['rblx_prometheus']['config']['telegraf_input']['_target_list'] : scrape_override
-alert_list = alert_override.empty? ? node['rblx_prometheus']['config']['alertmanager']['_target_list'] : alert_override
-prom_list = prom_override.empty? ? node['rblx_prometheus']['config']['prometheus']['_target_list'] : prom_override
+#cleanup_command = "/usr/bin/docker kill $(docker ps -q -f name=%p) || true; /usr/bin/docker rm $(docker ps -a -q -f name=%p) || true; /usr/bin/docker volume prune --filter label=#{node['rblx_prometheus']['config']['docker_label']} || true"
+cleanup_command = "/usr/bin/docker kill $(docker ps -q -f name=%p) || true; /usr/bin/docker container prune -f --filter label=#{label} || true; /usr/bin/docker volume prune -f --filter label=#{label} || true"
 
 service_name = 'prometheus'
 docs = 'https://prometheus.io/docs/'
+
+user = node['rblx_prometheus']['config']['uid'] || "34090"
+uid_override_string = user.empty? ? "" : "--user #{user}:#{user}"
 
 docker_service 'default' do
   action [:create, :start]
@@ -28,31 +29,6 @@ docker_image 'prometheus' do
   repo 'prom/prometheus'
   tag 'latest'
   action :pull
-end
-
-directory '/etc/prometheus' do
-  mode '0755'
-  action :create
-end
-
-template rules_location do
-  source 'prometheus/prometheus.rules.yml.erb'
-  mode '0755'
-  notifies :restart, "service[prometheus]", :delayed
-end
-
-template config_location do
-  source 'prometheus/prometheus.yml.erb'
-  variables(
-    alert_list: alert_list,
-    scrape_list: scrape_list,
-    prom_list: prom_list
-  )
-  mode '0755'
-  notifies :restart, "service[prometheus]", :delayed
-  not_if { node['rblx_prometheus']['config']['alertmanager']['_disable'] and alert_override.empty? }
-  not_if { node['rblx_prometheus']['config']['telegraf_input']['_disable'] and scrape_override.empty? }
-  not_if { node['rblx_prometheus']['config']['prometheus']['_disable'] and prom_override.empty? }
 end
 
 systemd_unit 'prometheus.service' do
@@ -65,9 +41,8 @@ systemd_unit 'prometheus.service' do
 	  },
 	  Service: {
 		  Type: 'simple',
-		  ExecStartPre: "-/bin/bash -c '/usr/bin/docker kill $(docker ps -q -f name=%p) || true'",
-		  ExecStartPre: "-/bin/bash -c '/usr/bin/docker rm $(docker ps -a -q -f name=%p) || true'",
-		  ExecStart: %Q(/usr/bin/docker run --log-driver=journald --net=host #{mount_string} --name %p #{image_name}),
+		  ExecStartPre: "-/bin/bash -c '#{cleanup_command}'",
+		  ExecStart: %Q(/usr/bin/docker run --log-driver=journald --net=host #{mounts} #{labels} #{uid_override_string} --name %p #{image_name}),
                   ExecStop: '/usr/bin/docker stop %p',
 		  Restart: 'on-failure',
 		  RestartSec: '30s',
