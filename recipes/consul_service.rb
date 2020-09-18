@@ -7,15 +7,25 @@
 port = 9090
 consul_name = node['rblx_prometheus']['config']['prometheus']['consul_service']
 
-tag_list = ['prometheus']
-pod = node['rblx_prometheus']['config']['pod']
+##### copy-paste blob to get pod and dc
+infradb_available = (node.key?('infradb') and node['infradb'].key?('serverInfo') and node['infradb']['serverInfo'].key?('Server') and not node['infradb']['serverInfo']['Server'].nil?)
+location_available = (infradb_available && !node['infradb']['serverInfo']['Server']['Location'].nil?)
 
-if pod
-  tag_list << pod
-  skip_update = node['rblx_prometheus']['skip_consul']
-else
-  skip_update = true
+pod = node['rblx_prometheus']['config']['pod']
+if pod.nil?
+  raise 'consul_service: pod unspecified by attributes and graphql unavailable' unless location_available
+  pod = node['infradb']['serverInfo']['Server']['Location']['Pod']['Name'].downcase()
 end
+
+dc = node['rblx_prometheus']['config']['datacenter']
+if dc.nil?
+  raise 'consul_service: datacenter unspecified by attributes and graphql unavailable' unless location_available
+  dc = node['infradb']['serverInfo']['Server']['Location']['DataCenter']['Abbreviation'].downcase()
+end
+##### end of copy-paste blob
+
+tag_list = ['prometheus', dc, pod]
+skip_update = node['rblx_prometheus']['skip_consul']
 
 consul_definition consul_name do
   type 'service'

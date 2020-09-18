@@ -5,7 +5,7 @@
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
 include_recipe 'rblx_prometheus::prom_discovery'
-include_recipe 'rblx_prometheus::consul_discovery'
+include_recipe 'rblx_prometheus::alertmanager_discovery'
 include_recipe 'rblx_prometheus::target_discovery'
 include_recipe 'rblx_prometheus::user'
 include_recipe 'rblx_prometheus::config'
