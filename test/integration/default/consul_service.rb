@@ -9,6 +9,7 @@ control 'prometheus_consul_service' do
     "port": 9090,
     "tags": [
       "prometheus",
+      "fake-datacenter",
       "fake-pod"
     ]
   }

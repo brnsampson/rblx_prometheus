@@ -2,6 +2,12 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.10
+- Do not trust node['graphql'] to have useful data anymore
+- Include dc in consul service tags
+- Filter target/prom/alertmanager discovery on dc and pod
+- Add logic to each discovery recipe to perfer attributes and fallback to graphql. If graphql attrs are empty, then raise error
+
 ## 0.1.9
 - Rework cleanup command to make sure we cleanup old containers
 - Label docker containers for easier purge/deletion

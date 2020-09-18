@@ -13,13 +13,24 @@ def is_port_open?(ip, port, timeout=5)
   end
 end
 
+##### copy-paste blob to get pod and dc
 infradb_available = (node.key?('infradb') and node['infradb'].key?('serverInfo') and node['infradb']['serverInfo'].key?('Server') and not node['infradb']['serverInfo']['Server'].nil?)
 location_available = (infradb_available && !node['infradb']['serverInfo']['Server']['Location'].nil?)
 
-if infradb_available && location_available
-  dc = node['infradb']['serverInfo']['Server']['Location']['DataCenter']['Abbreviation']
-  pod = node['infradb']['serverInfo']['Server']['Location']['Pod']['Name']
+if node['rblx_prometheus']['config']['pod'].nil?
+  raise 'target_discovery: pod unspecified by attributes and graphql unavailable' if !(location_available)
+  pod = node['infradb']['serverInfo']['Server']['Location']['Pod']['Name'].downcase()
+else
+  pod = node['rblx_prometheus']['config']['pod']
 end
+
+if node['rblx_prometheus']['config']['datacenter'].nil?
+  raise 'target_discovery: datacenter unspecified by attributes and graphql unavailable' if !(location_available)
+  dc = node['infradb']['serverInfo']['Server']['Location']['DataCenter']['Abbreviation'].downcase()
+else
+  dc = node['rblx_prometheus']['config']['datacenter']
+end
+##### end of copy-paste blob
 
 if node['rblx_prometheus']['config']['telegraf_input']['enable'] and dc and pod
   require 'net/http'

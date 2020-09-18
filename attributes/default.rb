@@ -10,7 +10,7 @@ default['rblx_prometheus']['config']['pod'] = nil
 default['rblx_prometheus']['config']['telegraf_input']['enable'] = true
 default['rblx_prometheus']['config']['telegraf_input']['port'] = '9273'
 default['rblx_prometheus']['config']['telegraf_input']['target_list_override'] = []
-default['rblx_prometheus']['config']['telegraf_input']['graphql'] = node['graphql'].nil? ? 'graphql-infra.simulpong.com' : node['graphql']['addr']
+default['rblx_prometheus']['config']['telegraf_input']['graphql'] = 'graphql-infra.simulpong.com'
 
 default['rblx_prometheus']['config']['alertmanager']['enable'] = true
 default['rblx_prometheus']['config']['alertmanager']['consul_service'] = 'alertmanager-pod-telemetry'
