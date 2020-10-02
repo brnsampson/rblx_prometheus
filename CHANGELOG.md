@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.11
+- Do not skip creating the config file if the alertmanager or prometheus discovery list are empty
+- This is not necessarily incorrect and will be watched by monitoring ideally.
+
 ## 0.1.10
 - Do not trust node['graphql'] to have useful data anymore
 - Include dc in consul service tags

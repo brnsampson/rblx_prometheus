@@ -56,6 +56,7 @@ if node['rblx_prometheus']['config']['telegraf_input']['enable'] and dc and pod
     end if response.code and servers_available
 
     if addresses.empty?
+      # This should pretty much never be empty. If it is, we probably have an error happening somewhere.
       node.override['rblx_prometheus']['config']['telegraf_input']['_disable'] = true
       node.override['rblx_prometheus']['config']['telegraf_input']['_target_list'] = ['EMPTY']
     else
