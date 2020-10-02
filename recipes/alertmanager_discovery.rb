@@ -41,8 +41,9 @@ if node['rblx_prometheus']['config']['alertmanager']['enable'] == true
     end if response.code
    
     if addresses.empty?
-      node.override['rblx_prometheus']['config']['alertmanager']['_disable'] = true
-      node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = ['EMPTY']
+      # It's okay if the list is empty, but we SHOULD have external monitoring on alertmanager in case all instances are down.
+      # node.override['rblx_prometheus']['config']['alertmanager']['_disable'] = true
+      node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = []
     else
       node.override['rblx_prometheus']['config']['alertmanager']['_target_list'] = addresses
     end 

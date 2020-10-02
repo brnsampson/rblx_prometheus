@@ -41,8 +41,9 @@ if node['rblx_prometheus']['config']['prometheus']['enable'] == true
     end if response.code
    
     if addresses.empty?
-      node.override['rblx_prometheus']['config']['prometheus']['_disable'] = true
-      node.override['rblx_prometheus']['config']['prometheus']['_target_list'] = ['EMPTY']
+      # Don't abort config changes if no prom consul services are up. That's okay, we will just send an alert.
+      # node.override['rblx_prometheus']['config']['prometheus']['_disable'] = true
+      node.override['rblx_prometheus']['config']['prometheus']['_target_list'] = []
     else
       node.override['rblx_prometheus']['config']['prometheus']['_target_list'] = addresses
     end 

@@ -3,7 +3,7 @@ maintainer 'Brian Sampson'
 maintainer_email 'bsampson@roblox.com'
 license 'All Rights Reserved'
 description 'Installs/Configures rblx_prometheus'
-version '0.1.10'
+version '0.1.11'
 chef_version '>= 13.0'
 
 supports 'centos', '>= 7'
