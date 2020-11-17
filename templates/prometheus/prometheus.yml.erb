@@ -17,6 +17,11 @@ alerting:
 rule_files:
   - prometheus.rules.yml
 
+remote_write:
+<% @remote_write_list.each do |host| %>
+  - url: "http://<%= host %>"
+<% end %>
+
 scrape_configs:
   # metrics_path defaults to '/metrics'
   # scheme defaults to 'http'.

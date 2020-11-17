@@ -39,6 +39,10 @@ suites:
       inspec_tests:
         - test/integration/default
     attributes:
+      consul:
+        config:
+          server: true
+          bootstrap_expect: 1
       consul-cluster:
         tls:
           ssl_key:

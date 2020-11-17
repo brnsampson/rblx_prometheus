@@ -40,3 +40,13 @@ end
 describe command('curl -XGET -s http://localhost:9090/-/healthy') do
   its('stdout') { should match "Prometheus is Healthy." }
 end
+
+describe file('/etc/prometheus/prometheus.yml') do
+  # The target list utilizes the override attr
+  its('content') { should include(%q(["fake-target-1", "fake-target-2"])) }
+  # These three query consul
+  its('content') { should match %q(\["\d+\.\d+\.\d+\.\d+:9090"\]) }
+  its('content') { should include(%q(["fake-alertmanager-1", "fake-alertmanager-2"])) }
+  #its('content') { should match %q(\["\d+\.\d+\.\d+\.\d+:1234"\]) }
+  its('content') { should match %q("http://\d+\.\d+\.\d+\.\d+:1236") }
+end

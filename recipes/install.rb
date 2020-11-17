@@ -4,26 +4,26 @@
 #
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
+config = node['rblx_prometheus']['config']
+
+command_args = config['_command_args']
+
 image_name = "#{node['rblx_prometheus']['image']}:#{node['rblx_prometheus']['tag']}"
 config_location = '/etc/prometheus/prometheus.yml'
 rules_location = '/etc/prometheus/prometheus.rules.yml'
 data_location = '/var/lib/prometheus'
 mounts = "-v #{config_location}:#{config_location} -v #{rules_location}:#{rules_location} -v #{data_location}:/prometheus"
-label = node['rblx_prometheus']['config']['docker_label']
+label = config['docker_label']
 labels = "--label #{label}"
 
-#cleanup_command = "/usr/bin/docker kill $(docker ps -q -f name=%p) || true; /usr/bin/docker rm $(docker ps -a -q -f name=%p) || true; /usr/bin/docker volume prune --filter label=#{node['rblx_prometheus']['config']['docker_label']} || true"
+#cleanup_command = "/usr/bin/docker kill $(docker ps -q -f name=%p) || true; /usr/bin/docker rm $(docker ps -a -q -f name=%p) || true; /usr/bin/docker volume prune --filter label=#{config['docker_label']} || true"
 cleanup_command = "/usr/bin/docker kill $(docker ps -q -f name=%p) || true; /usr/bin/docker container prune -f --filter label=#{label} || true; /usr/bin/docker volume prune -f --filter label=#{label} || true"
 
 service_name = 'prometheus'
 docs = 'https://prometheus.io/docs/'
 
-user = node['rblx_prometheus']['config']['uid'] || "34090"
+user = config['uid'] || "34090"
 uid_override_string = user.empty? ? "" : "--user #{user}:#{user}"
-
-docker_service 'default' do
-  action [:create, :start]
-end
 
 docker_image 'prometheus' do
   repo 'prom/prometheus'
@@ -42,7 +42,7 @@ systemd_unit 'prometheus.service' do
 	  Service: {
 		  Type: 'simple',
 		  ExecStartPre: "-/bin/bash -c '#{cleanup_command}'",
-		  ExecStart: %Q(/usr/bin/docker run --log-driver=journald --net=host #{mounts} #{labels} #{uid_override_string} --name %p #{image_name}),
+		  ExecStart: %Q(/usr/bin/docker run --log-driver=journald --net=host #{mounts} #{labels} #{uid_override_string} --name %p #{image_name} #{command_args}),
                   ExecStop: '/usr/bin/docker stop %p',
 		  Restart: 'on-failure',
 		  RestartSec: '30s',
