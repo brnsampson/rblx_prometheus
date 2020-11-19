@@ -4,6 +4,8 @@
 #
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
+config = node['rblx_prometheus']['config']
+
 def is_port_open?(ip, port, timeout=5)
   begin
     Socket.tcp(ip, port, connect_timeout: timeout)
@@ -17,28 +19,28 @@ end
 infradb_available = (node.key?('infradb') and node['infradb'].key?('serverInfo') and node['infradb']['serverInfo'].key?('Server') and not node['infradb']['serverInfo']['Server'].nil?)
 location_available = (infradb_available && !node['infradb']['serverInfo']['Server']['Location'].nil?)
 
-pod = node['rblx_prometheus']['config']['pod']
+pod = config['pod']
 if pod.nil?
   raise 'target_discovery: pod unspecified by attributes and graphql unavailable' unless location_available
   pod = node['infradb']['serverInfo']['Server']['Location']['Pod']['Name'].downcase()
 end
 
-dc = node['rblx_prometheus']['config']['datacenter']
+dc = config['datacenter']
 if dc.nil?
   raise 'target_discovery: datacenter unspecified by attributes and graphql unavailable' unless location_available
   dc = node['infradb']['serverInfo']['Server']['Location']['DataCenter']['Abbreviation'].downcase()
 end
 ##### end of copy-paste blob
 
-if node['rblx_prometheus']['config']['telegraf_input']['enable'] and dc and pod
+if config['telegraf_input']['enable'] and dc and pod
   require 'net/http'
   require 'uri'
   require 'json'
   require 'socket'
 
   addresses = []
-  port = node['rblx_prometheus']['config']['telegraf_input']['port']
-  graphql = node['rblx_prometheus']['config']['telegraf_input']['graphql']
+  port = config['telegraf_input']['port']
+  graphql = config['telegraf_input']['graphql']
   begin
     uri = URI.parse(%Q(https://#{graphql}/graphql?query={DataCenter(Abbreviation:"#{dc}"){PodsWithDataCenter(Name:"#{pod}"){ServerLocationsWithPod{Server{HostName,PrimaryIPAddress}}}}}))
     response = Net::HTTP.get_response(uri)
@@ -50,7 +52,7 @@ if node['rblx_prometheus']['config']['telegraf_input']['enable'] and dc and pod
 
     server_list.each do |server|
       addr = server['Server']['PrimaryIPAddress']
-      if is_port_open?(addr, port)
+      if config['scrape_unresponsive'] || is_port_open?(addr, port)
         addresses << "#{addr}:#{port}"
       end
     end if response.code and servers_available

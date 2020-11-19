@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.12
+- Generally tried to clean up the code and make it a bit more readable
+- Added a commandline_args recipe to generate a string for additional arguments when starting the service.
+- Set retention time by passing as command line argument. Defaults to 3 days.
+- Moved consul discovery into a library.
+- Removed the prom and alertmanager discovery recipes. Instead, use the above library in the config recipe.
+- Added remote_write discovery in config recipe to detect remote write endpoints from consul the same way we do alertmanager.
+- Added a few debug log resources to the config recipe for the future (must add provisioner: log_level: debug in kitchen.yml to see)
+- We were hardcoding the docker image and tag in the install recipe. Those have been replaced with the attributes
+- Changed docker image and tag attrs to match alertmanager
+
 ## 0.1.11
 - Do not skip creating the config file if the alertmanager or prometheus discovery list are empty
 - This is not necessarily incorrect and will be watched by monitoring ideally.
