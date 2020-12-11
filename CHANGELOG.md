@@ -2,6 +2,15 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.13
+- Fix typo in default prom-write-adapters consul service name
+- Fix path in remote_write block in prometheus.yml template
+- Add metric drop regex to attrs
+- Add static pod and dc tags to scraped metrics
+- Add static metric drops for per-cpu metrics and virtual ethernet adapters
+- Add reload command to prometheus unit file
+- Update config changes to notify prometheus reload instead of restart
+
 ## 0.1.12
 - Generally tried to clean up the code and make it a bit more readable
 - Added a commandline_args recipe to generate a string for additional arguments when starting the service.

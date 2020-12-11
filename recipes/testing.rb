@@ -35,7 +35,7 @@ end
 consul_definition 'remote-write' do
   type 'service'
   parameters(
-    name: 'prom-write-adapter-pod-telemetry',
+    name: 'prom-write-adapters-pod-telemetry',
     port: 1236,
     tags: ['fake-pod', 'fake-datacenter']
   )

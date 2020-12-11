@@ -46,6 +46,7 @@ systemd_unit 'prometheus.service' do
                   ExecStop: '/usr/bin/docker stop %p',
 		  Restart: 'on-failure',
 		  RestartSec: '30s',
+		  ExecReload: '/usr/bin/docker kill --signal=HUP %p',
 	  },
 	  Install: {
 		  WantedBy: 'multi-user.target',
@@ -62,7 +63,8 @@ systemd_unit 'prometheus.service' do
 end
 
 service "prometheus" do
-  supports :restart => true, :status => true
+  supports :restart => true, :status => true, :reload => true
   restart_command "systemctl restart prometheus"
+  reload_command "systemctl reload prometheus"
   action [ :enable, :start ]
 end
