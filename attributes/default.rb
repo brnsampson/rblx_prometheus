@@ -32,8 +32,9 @@ default['rblx_prometheus']['config']['prometheus']['consul_service'] = 'promethe
 default['rblx_prometheus']['config']['prometheus']['target_list_override'] = []
 
 default['rblx_prometheus']['config']['remote_write']['enable'] = true
-default['rblx_prometheus']['config']['remote_write']['consul_service'] = 'prom-write-adapter-pod-telemetry'
+default['rblx_prometheus']['config']['remote_write']['consul_service'] = 'prom-write-adapters-pod-telemetry'
 default['rblx_prometheus']['config']['remote_write']['target_list_override'] = []
+default['rblx_prometheus']['config']['remote_write']['drop_metric_regex'] = 'drop_me'
 
 #### Absent attribute. Set this to true to remove prometheus from the system
 default['rblx_prometheus']['absent'] = false

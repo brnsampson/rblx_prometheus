@@ -48,5 +48,10 @@ describe file('/etc/prometheus/prometheus.yml') do
   its('content') { should match %q(\["\d+\.\d+\.\d+\.\d+:9090"\]) }
   its('content') { should include(%q(["fake-alertmanager-1", "fake-alertmanager-2"])) }
   #its('content') { should match %q(\["\d+\.\d+\.\d+\.\d+:1234"\]) }
-  its('content') { should match %q("http://\d+\.\d+\.\d+\.\d+:1236") }
+  its('content') { should match %q("http://\d+\.\d+\.\d+\.\d+:1236/receive") }
+  # Make sure we got the drop regex in the config
+  its('content') { should match %q(drop_me) }
+  # Make sure we got the dc and pod labels in the config
+  its('content') { should match %q(fake-pod) }
+  its('content') { should match %q(fake-datacenter) }
 end

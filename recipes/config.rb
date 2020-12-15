@@ -107,7 +107,7 @@ template rules_location do
   mode '0755'
   owner 'prometheus'
   group 'prometheus'
-  notifies :restart, "service[prometheus]", :delayed
+  notifies :reload, "service[prometheus]", :delayed
 end
 
 log 'debug skip_configure' do
@@ -126,12 +126,15 @@ template config_location do
     alert_list: alert_list,
     scrape_list: scrape_list,
     prom_list: prom_list,
-    remote_write_list: remote_write_list
+    remote_write_list: remote_write_list,
+    rr_drop_metric_regex: config['remote_write']['drop_metric_regex'],
+    pod: pod,
+    dc: dc
   )
   mode '0755'
   owner 'prometheus'
   group 'prometheus'
-  notifies :restart, "service[prometheus]", :delayed
+  notifies :reload, "service[prometheus]", :delayed
   not_if { skip_configure && (alert_list.empty? || prom_list.empty? || remote_write_list.empty?) }
   not_if { node['rblx_prometheus']['config']['telegraf_input']['_disable'] && scrape_override.empty? }
 end

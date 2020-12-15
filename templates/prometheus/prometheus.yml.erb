@@ -17,9 +17,24 @@ alerting:
 rule_files:
   - prometheus.rules.yml
 
+<% unless @remote_write_list.empty? %>
 remote_write:
 <% @remote_write_list.each do |host| %>
-  - url: "http://<%= host %>"
+  - url: "http://<%= host %>/receive"
+    write_relabel_configs:
+      - source_labels: ['__name__']
+        regex: '<%= @rr_drop_metric_regex %>'
+        action: drop
+      - source_labels: ['__name__','fstype']
+        regex: 'disk.*;tmpfs'
+        action: drop
+      - source_labels: ['__name__','interface']
+        regex: 'net.*;(docker.*|veth.*)'
+        action: drop
+      - source_labels: ['__name__','cpu']
+        regex: 'cpu.*;cpu\d+'
+        action: drop
+<% end %>
 <% end %>
 
 scrape_configs:
@@ -31,15 +46,18 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets: <%= @scrape_list %>
+        labels: {'dc': <%= @dc %> , 'pod': <%= @pod %>}
   - job_name: prometheus
     scrape_interval: 5s
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
       - targets: <%= @prom_list %>
+        labels: {'dc': <%= @dc %> , 'pod': <%= @pod %>}
   - job_name: alertmanager
     scrape_interval: 5s
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
       - targets: <%= @alert_list %>
+        labels: {'dc': <%= @dc %> , 'pod': <%= @pod %>}
