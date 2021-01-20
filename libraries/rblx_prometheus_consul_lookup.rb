@@ -7,7 +7,18 @@
 
 module RblxPrometheus
   module ConsulLookup
-    def consul_lookup(consul_addr, consul_service, req_tags=[], req_meta=[])
+    def consul_lookup(consul_service, req_tags=[], req_meta=[], consul_addr='127.0.0.1:8500', limit=0)
+      #
+      # consul_service: name of service to query
+      #
+      # req_tags: filter out any services which do not have specified tags
+      #
+      # req_meta: filter out any services which do not have specified meta keys defined
+      #
+      # consul_addr: address of a consul agent to query. Typically 127.0.0.1:8500
+      #
+      # limit: if limit > 0, then only return the first _limit_ responses sorted by node ID
+      #
       require 'net/http'
       require 'uri'
       require 'json'
@@ -40,15 +51,23 @@ module RblxPrometheus
 
         if filters_passed
           addr = "#{instance['Address']}:#{instance['ServicePort']}"
-          filtered_services << {'addr': addr, 'meta': meta}
+	  id = instance['ID']
+          filtered_services << {'addr': addr, 'meta': meta, 'id': id }
         end
       end
-      
+
+      # Sort by node ID and return only first up to limit reqponses
+      filtered_services = filtered_services.sort_by { |service| service[:id] }
+      if limit > 0
+        n = [filtered_services.length - 1, limit - 1].min
+        filtered_services = filtered_services[0..n]
+      end
+ 
       return filtered_services
     end
 
-    def consul_addrs_lookup(consul_addr, consul_service, req_tags, req_meta=[])
-      res = consul_lookup(consul_addr, consul_service, req_tags, req_meta=[])
+    def consul_addrs_lookup(consul_service, req_tags, req_meta=[], consul_addr='127.0.0.1:8500', limit=0)
+      res = consul_lookup(consul_service, req_tags, req_meta, consul_addr, limit)
       addrs = res.map { |service| service[:addr] }
       return addrs
     end

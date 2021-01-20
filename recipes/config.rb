@@ -40,9 +40,9 @@ alert_list = []
 prom_list = []
 remote_list = []
 begin
-  alert_list = consul_addrs_lookup(config['consul_addr'], config['alertmanager']['consul_service'], req_tags)
-  prom_list = consul_addrs_lookup(config['consul_addr'], config['prometheus']['consul_service'], req_tags)
-  remote_write_list = consul_addrs_lookup(config['consul_addr'], config['remote_write']['consul_service'], req_tags)
+  alert_list = consul_addrs_lookup(config['alertmanager']['consul_service'], req_tags, [], config['consul_addr'])
+  prom_list = consul_addrs_lookup(config['prometheus']['consul_service'], req_tags, [], config['consul_addr'])
+  remote_write_list = consul_addrs_lookup(config['remote_write']['consul_service'], req_tags, [], config['consul_addr'], 1)
 rescue => e
   alert_list = alert_list || []
   prom_list = prom_list || []
@@ -97,9 +97,16 @@ directory rules_location do
   only_if { ::Dir.exist?(rules_location) }
 end
 
+# If the config file does not exist, then docker will assume it is a missing directly and create it for us, This is not good.
+# Since we don't modify the template resource below if we have any errors from the consul query and consul isn't running the very first
+# chef run, we should protect ourselves by removing a directory if that was created and create an empty file if it does not exist yet.
 directory config_location do
   action :delete
   only_if { ::Dir.exist?(config_location) }
+end
+
+file config_location do
+  action :create_if_missing
 end
 
 template rules_location do

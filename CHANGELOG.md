@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.14
+- Only use one write-adapter at a time
+
 ## 0.1.13
 - Fix typo in default prom-write-adapters consul service name
 - Fix path in remote_write block in prometheus.yml template
