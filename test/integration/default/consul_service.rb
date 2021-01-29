@@ -11,7 +11,11 @@ control 'prometheus_consul_service' do
       "prometheus",
       "fake-datacenter",
       "fake-pod"
-    ]
+    ],
+    "meta": {
+      "dc": "fake-datacenter",
+      "pod": "fake-pod"
+    }
   }
 })}
   end

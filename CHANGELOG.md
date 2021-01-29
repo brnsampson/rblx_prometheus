@@ -2,6 +2,9 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.1.15
+- Provide dc and pod in consul service as meta params instead of tags (tags still there, but depricating)
+
 ## 0.1.14
 - Only use one write-adapter at a time
 

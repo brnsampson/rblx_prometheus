@@ -25,6 +25,7 @@ end
 ##### end of copy-paste blob
 
 tag_list = ['prometheus', dc, pod]
+meta = {dc: dc, pod: pod}
 skip_update = node['rblx_prometheus']['skip_consul']
 
 consul_definition consul_name do
@@ -32,7 +33,8 @@ consul_definition consul_name do
   parameters(
     name: consul_name,
     port: port,
-    tags: tag_list
+    tags: tag_list,
+    meta: meta
   )
   notifies :reload, 'consul_service[consul]', :delayed
   not_if { node['rblx_prometheus']['absent_consul'] }
