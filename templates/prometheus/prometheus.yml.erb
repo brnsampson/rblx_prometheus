@@ -40,13 +40,19 @@ remote_write:
 scrape_configs:
   # metrics_path defaults to '/metrics'
   # scheme defaults to 'http'.
+<% @scrape_hash.each do |datacenter, scrape_list| %>
   - job_name: scrape
     scrape_interval: 5s
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
-      - targets: <%= @scrape_list %>
-        labels: {'dc': <%= @dc %> , 'pod': <%= @pod %>}
+      - targets: <%= scrape_list %>
+<% if @pod.nil? %>
+        labels: {'dc': <%= datacenter %>}
+<% else %>
+        labels: {'dc': <%= datacenter %> , 'pod': <%= @pod %>}
+<% end %>
+<% end %>
   - job_name: prometheus
     scrape_interval: 5s
     scrape_timeout: 2s

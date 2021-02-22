@@ -14,14 +14,15 @@ default['rblx_prometheus']['config']['docker_label'] = 'prometheus'
 default['rblx_prometheus']['config']['consul_addr'] = '127.0.0.1:8500'
 default['rblx_prometheus']['config']['datacenter'] = nil
 default['rblx_prometheus']['config']['pod'] = nil
+default['rblx_prometheus']['config']['pop_mode'] = false
 
 default['rblx_prometheus']['config']['retention_time'] = '3d'
 default['rblx_prometheus']['config']['scrape_unresponsive'] = true
 
-default['rblx_prometheus']['config']['telegraf_input']['enable'] = true
-default['rblx_prometheus']['config']['telegraf_input']['port'] = '9273'
-default['rblx_prometheus']['config']['telegraf_input']['target_list_override'] = []
-default['rblx_prometheus']['config']['telegraf_input']['graphql'] = 'graphql-infra.simulpong.com'
+default['rblx_prometheus']['config']['scrape_input']['enable'] = true
+default['rblx_prometheus']['config']['scrape_input']['port'] = '9273'
+default['rblx_prometheus']['config']['scrape_input']['target_list_override'] = []
+default['rblx_prometheus']['config']['scrape_input']['graphql'] = 'graphql-infra.simulpong.com'
 
 default['rblx_prometheus']['config']['alertmanager']['enable'] = true
 default['rblx_prometheus']['config']['alertmanager']['consul_service'] = 'alertmanager-pod-telemetry'

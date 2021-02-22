@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the rblx_prometheus cookbook.
 
+## 0.2.0
+- Add pop mode due do the differences in infradb structure for the pops
+- Move target discovery into library and add test into /test/unit/
+
 ## 0.1.15
 - Provide dc and pod in consul service as meta params instead of tags (tags still there, but depricating)
 

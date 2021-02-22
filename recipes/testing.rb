@@ -4,7 +4,7 @@
 #
 # Copyright:: 2020, Roblox, All Rights Reserved.
 
-node.override['rblx_prometheus']['config']['telegraf_input']['target_list_override'] = ['fake-target-1', 'fake-target-2']
+node.override['rblx_prometheus']['config']['scrape_input']['target_list_override'] = ['fake-target-1', 'fake-target-2']
 node.override['rblx_prometheus']['config']['alertmanager']['target_list_override'] = ['fake-alertmanager-1', 'fake-alertmanager-2']
 #node.override['rblx_prometheus']['config']['prometheus']['target_list_override'] = ['fake-prom-1', 'fake-prom-2']
 #node.override['rblx_prometheus']['config']['remote_write']['target_list_override'] = ['fake-rw-1']
